@@ -1,5 +1,8 @@
 package it.epicode.be.model;
 
-public class TipoRuolo {
+public enum TipoRuolo {
+	
+	ROLE_USER,
+	ROLE_ADMIN
 
 }

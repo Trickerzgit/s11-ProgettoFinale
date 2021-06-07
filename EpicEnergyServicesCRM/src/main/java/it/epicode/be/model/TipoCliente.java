@@ -1,5 +1,10 @@
 package it.epicode.be.model;
 
-public class TipoCliente {
+public enum TipoCliente {
+	
+	PA,
+	SAS,
+	SPA,
+	SRL
 
 }
