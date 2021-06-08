@@ -3,9 +3,13 @@ package it.epicode.be.presentation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,12 +28,14 @@ public class ClienteController {
 	private ClienteService clService;
 	
 	@RequestMapping(value="/inserisci", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<Cliente> saveCliente(@RequestBody Cliente c) {
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Cliente> saveCliente(@RequestBody @DateTimeFormat(pattern = "yyyy-MM-dd")Cliente c) {
 		Cliente nuovoCliente = clService.saveCliente(c);
 		return new ResponseEntity<Cliente>(nuovoCliente, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/elimina/{id}", method = RequestMethod.DELETE)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String delete(@PathVariable("id") Long id) {
 		if (!clService.getCliente(id).equals(null)) {
 			clService.elimina(id);
@@ -41,8 +47,9 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<List<Cliente>> getAll() {
-		List<Cliente> result = clService.getAll();
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getAll(Pageable page) {
+		Page<Cliente> result = clService.getAll(page);
 		if (result.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
@@ -52,6 +59,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/get/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<Cliente> getClienteById(@PathVariable("id") Long id) {
 		Cliente c = clService.getCliente(id);
 		if (!c.equals(null)) {
@@ -62,7 +70,20 @@ public class ClienteController {
 		}
 	}
 	
+	@GetMapping("/getby/{nome}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getClientePerNome(@PathVariable("nome") String nome, Pageable page) {
+		Page<Cliente> result = clService.getClientePerNome(nome, page);
+		if (!result.isEmpty()) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
 	@RequestMapping("/modifica/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Cliente> updateCliente(@RequestBody Cliente c, @PathVariable("id") Long id) {
 		if (clService.getCliente(id).equals(null)) {
 			return new ResponseEntity<Cliente>(HttpStatus.NO_CONTENT);

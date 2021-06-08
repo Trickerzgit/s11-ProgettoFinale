@@ -3,9 +3,12 @@ package it.epicode.be.presentation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,12 +27,14 @@ public class IndirizzoController {
 	private IndirizzoService iService;
 	
 	@RequestMapping(value="/inserisci", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Indirizzo> saveCliente(@RequestBody Indirizzo i) {
 		Indirizzo nuovoCliente = iService.saveIndirizzo(i);
 		return new ResponseEntity<Indirizzo>(nuovoCliente, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/elimina/{id}", method = RequestMethod.DELETE)
+	@PreAuthorize("hasRole('ADMIN')")
 	public String delete(@PathVariable("id") Long id) {
 		if (!iService.getIndirizzo(id).equals(null)) {
 			iService.elimina(id);
@@ -41,8 +46,9 @@ public class IndirizzoController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<List<Indirizzo>> getAll() {
-		List<Indirizzo> result = iService.getAll();
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Indirizzo>> getAll(Pageable page) {
+		Page<Indirizzo> result = iService.getAll(page);
 		if (result.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
@@ -52,6 +58,7 @@ public class IndirizzoController {
 	}
 	
 	@GetMapping("/get/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<Indirizzo> getIndirizzoById(@PathVariable("id") Long id) {
 		Indirizzo c = iService.getIndirizzo(id);
 		if (!c.equals(null)) {
@@ -63,6 +70,7 @@ public class IndirizzoController {
 	}
 	
 	@RequestMapping("/modifica/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Indirizzo> updateIndirizzo(@RequestBody Indirizzo c, @PathVariable("id") Long id) {
 		if (iService.getIndirizzo(id).equals(null)) {
 			return new ResponseEntity<Indirizzo>(HttpStatus.NO_CONTENT);

@@ -3,6 +3,8 @@ package it.epicode.be.logic;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +26,8 @@ public class ProvinciaService {
 		return repoP.save(p);
 	}
 	
-	public List<Provincia> getAll() {
-		return repoP.findAll();
+	public Page<Provincia> getAll(Pageable page) {
+		return repoP.findAll(page);
 	}
 	
 	public void elimina(Long id) {

@@ -1,8 +1,12 @@
 package it.epicode.be.logic;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +28,8 @@ public class FatturaService {
 		return repoF.save(f);
 	}
 	
-	public List<Fattura> getAll() {
-		return repoF.findAll();
+	public Page<Fattura> getAll(Pageable page) {
+		return repoF.findAll(page);
 	}
 	
 	public void elimina(Integer id) {
@@ -40,4 +44,29 @@ public class FatturaService {
 		repoF.save(daModificare);
 		return daModificare;
 	}
+	
+	public Page<Fattura> getByCliente(Long id, Pageable page) {
+		return repoF.findByCliente(id, page);
+	}
+	
+	public Page<Fattura> getByStato(String tipo, Pageable page) {
+		return repoF.findByStatus(tipo, page);
+	}
+	
+	public Page<Fattura> getByData(Date data, Pageable page) {
+		return repoF.findByData(data, page);
+	}
+	
+	public Page<Fattura> getByAnno(int anno, Pageable page) {
+		return repoF.findByYear(anno, page);
+	}
+	
+	public Page<Fattura> getByDataAnno(int anno, Pageable page) {
+		return repoF.findByYearDate(anno, page);
+	}
+	
+	public Page<Fattura> getByRange(BigDecimal minimo, BigDecimal massimo, Pageable page) {
+		return repoF.findByRange(minimo, massimo, page);
+	}
+	
 }

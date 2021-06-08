@@ -10,21 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.epicode.be.logic.StatoFatturaService;
-import it.epicode.be.model.StatoFattura;
+import it.epicode.be.logic.RuoloService;
+import it.epicode.be.model.Ruolo;
 
 @RestController
-@RequestMapping("/api/stato_fattura")
-public class StatoFatturaController {
-	
-	@Autowired
-	private StatoFatturaService sfService;
-	
-	@PreAuthorize("hasRole('ADMIN')")
-	@RequestMapping(value="/inserisci", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<StatoFattura> saveComune(@RequestBody StatoFattura c) {
-		StatoFattura nuovoComune = sfService.saveStato(c);
-		return new ResponseEntity<StatoFattura>(nuovoComune, HttpStatus.OK);
-	}
+@RequestMapping("/api/ruolo")
+public class RuoloController {
 
+	@Autowired
+	private RuoloService rService;
+	
+	@RequestMapping(value="/inserisci", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<Ruolo> saveRuolo(@RequestBody Ruolo r) {
+		Ruolo nuovoRuolo = rService.saveRuolo(r);
+		return new ResponseEntity<Ruolo>(nuovoRuolo, HttpStatus.OK);
+	}
+	
 }

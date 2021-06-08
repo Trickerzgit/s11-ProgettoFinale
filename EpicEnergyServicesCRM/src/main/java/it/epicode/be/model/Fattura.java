@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -24,5 +26,9 @@ public class Fattura {
 	@SequenceGenerator(name="ees_fattura_seq", sequenceName="ees_fattura_seq", allocationSize=1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ees_fattura_seq")
 	private Integer numero;
+	@OneToOne
+	private StatoFattura stato;
+	@ManyToOne
+	private Cliente cliente;
 	
 }

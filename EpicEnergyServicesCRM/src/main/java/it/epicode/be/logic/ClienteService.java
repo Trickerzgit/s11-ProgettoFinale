@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +28,16 @@ public class ClienteService {
 		return repoC.save(c);
 	}
 	
-	public List<Cliente> getAll() {
-		return repoC.findAll();
+	public Page<Cliente> getAll(Pageable page) {
+		return repoC.findAll(page);
 	}
 	
 	public void elimina(Long id) {
 		repoC.deleteById(id);
+	}
+	
+	public Page<Cliente> getClientePerNome(String nome, Pageable page) {
+		return repoC.findByNomeContatto(nome, page);
 	}
 	
 	public Cliente modifica(Cliente c, Long id) {
