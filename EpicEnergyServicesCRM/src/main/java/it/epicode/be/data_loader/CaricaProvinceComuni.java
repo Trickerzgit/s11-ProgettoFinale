@@ -10,24 +10,31 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import it.epicode.be.logic.ProvinciaService;
 import it.epicode.be.model.Provincia;
 
 public class CaricaProvinceComuni {
 
-    @Autowired
-    private static ProvinciaService pS;
+	
+	private static AnnotationConfigApplicationContext ctx;
 	
 	public static void main(String[] args) throws IOException {
 
 //		letturaCSV("csv/province-italiane.csv");
-//		List<Provincia> prova = creazioneLista("csv/province-italiane.csv");
-//		for (Provincia p : prova) {
-//			pS.saveProvincia(p);
-//		}
 		
+		ctx = new AnnotationConfigApplicationContext(ConfigurationClass.class);
+		
+		ctx.refresh();
+		
+		ProvinciaService pService = ctx.getBean(ProvinciaService.class);
+		
+		List<Provincia> lista = creazioneLista("csv/province-italiane.csv");
+		for (Provincia p : lista) {
+			pService.saveProvincia(p);
+		}
 		
 	}
 	
@@ -41,11 +48,11 @@ public class CaricaProvinceComuni {
 					p.setRegione(record.get(2));
 					System.out.println(p);
 				}
-				
+
 			}
 		}
 	}
-	
+
 	public static List<Provincia> creazioneLista(String input) throws IOException {
 		List<Provincia> lista = new ArrayList<Provincia>();
 		try (Reader reader = Files.newBufferedReader(Paths.get(input))) {
@@ -56,11 +63,12 @@ public class CaricaProvinceComuni {
 					p.setNome(record.get(1));
 					p.setRegione(record.get(2));
 					lista.add(p);
+
 				}
-				
 			}
+			return lista;
 		}
-	return lista;
+
 	}
 
 }
