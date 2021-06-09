@@ -10,31 +10,17 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import it.epicode.be.logic.ProvinciaService;
 import it.epicode.be.model.Provincia;
 
 public class CaricaProvinceComuni {
 
-	
-	private static AnnotationConfigApplicationContext ctx;
+
 	
 	public static void main(String[] args) throws IOException {
 
 //		letturaCSV("csv/province-italiane.csv");
 		
-		ctx = new AnnotationConfigApplicationContext(ConfigurationClass.class);
-		
-		ctx.refresh();
-		
-		ProvinciaService pService = ctx.getBean(ProvinciaService.class);
-		
-		List<Provincia> lista = creazioneLista("csv/province-italiane.csv");
-		for (Provincia p : lista) {
-			pService.saveProvincia(p);
-		}
 		
 	}
 	
