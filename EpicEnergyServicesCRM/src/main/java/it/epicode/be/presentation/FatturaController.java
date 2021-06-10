@@ -84,10 +84,10 @@ public class FatturaController {
 		}
 	}
 	
-	@GetMapping("/data/{data}")
+	@GetMapping("/data/{datainizio}/{datafine}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<Page<Fattura>> getByData(@PathVariable("data") @DateTimeFormat(pattern = "yyyy-MM-dd")Date data, Pageable page) {
-		Page<Fattura> result = fService.getByData(data, page);
+	public ResponseEntity<Page<Fattura>> getByData(@DateTimeFormat(pattern = "yyyy-MM-dd")@PathVariable("datainizio") Date dataInizio, @PathVariable("datafine") Date dataFine, Pageable page) {
+		Page<Fattura> result = fService.getByData(dataInizio, dataFine, page);
 		if (result.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

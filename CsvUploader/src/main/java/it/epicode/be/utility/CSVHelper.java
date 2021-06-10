@@ -64,7 +64,7 @@ public class CSVHelper {
 				comune.setNome(record.get(2));
 				for (Provincia p : province) {
 					
-					if (p.getNome().equals(record.get(3))) {
+					if (record.get(3).contains(p.getNome())) {
 						comune.setProvincia(p);
 						
 						comuni.add(comune);

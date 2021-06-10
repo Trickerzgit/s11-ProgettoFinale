@@ -52,8 +52,8 @@ public class FatturaService {
 		return repoF.findByStatus(tipo, page);
 	}
 	
-	public Page<Fattura> getByData(Date data, Pageable page) {
-		return repoF.findByData(data, page);
+	public Page<Fattura> getByData(Date dataInizio, Date dataFine, Pageable page) {
+		return repoF.findByData(dataInizio, dataFine, page);
 	}
 	
 	public Page<Fattura> getByAnno(int anno, Pageable page) {

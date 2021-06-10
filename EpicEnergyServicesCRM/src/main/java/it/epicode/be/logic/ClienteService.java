@@ -1,5 +1,6 @@
 package it.epicode.be.logic;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,4 +62,19 @@ public class ClienteService {
 		return daModificare;
 	}
 	
+	public Page<Cliente> getClientiByOrder(Pageable page) {
+		return repoC.OrderByProvinciaLegale(page);
+	}
+	
+	public Page<Cliente> getClientiPerFatturato(Pageable page, BigDecimal fatturato) {
+		return repoC.GetClientiPerFatturato(page, fatturato);
+	}
+	
+	public Page<Cliente> getClientiPerDataInserimento(Pageable page, Date dataInizio, Date dataFine) {
+		return repoC.findClientiByInserimento(page, dataInizio, dataFine);
+	}
+	
+	public Page<Cliente> getClientiPerUltimoContatto(Pageable page, Date dataInizio, Date dataFine) {
+		return repoC.findClientiByUltimoContatto(page, dataInizio, dataFine);
+	}
 }

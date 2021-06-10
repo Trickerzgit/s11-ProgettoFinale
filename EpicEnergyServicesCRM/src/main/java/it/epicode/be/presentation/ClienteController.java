@@ -1,5 +1,7 @@
 package it.epicode.be.presentation;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.epicode.be.logic.ClienteService;
 import it.epicode.be.model.Cliente;
 
+@Component
 @RestController
 @RequestMapping("/api/cliente")
 public class ClienteController {
@@ -46,9 +51,23 @@ public class ClienteController {
 		}
 	}
 	
+	
+	
 	@GetMapping("/")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<Page<Cliente>> getAll(Pageable page) {
+		Page<Cliente> result = clService.getAll(page);
+		if (result.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		else {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/order/province")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getAllByProvince(Pageable page) {
 		Page<Cliente> result = clService.getAll(page);
 		if (result.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -69,6 +88,44 @@ public class ClienteController {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
 	}
+	
+	@GetMapping("/get/fatturato/{importo}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getClientiByFatturato(@PathVariable("importo") BigDecimal importo, Pageable page) {
+		Page<Cliente> result = clService.getClientiPerFatturato(page, importo);
+		if (result.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		else {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/get/inserimento/{datainizio}/{datafine}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getClientiByInserimento(@DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("datainizio") Date dataInizio, @PathVariable("datafine") Date dataFine, Pageable page) {
+		Page<Cliente> result = clService.getClientiPerDataInserimento(page, dataInizio, dataFine);
+		if (result.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		else {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+	}
+	
+	@GetMapping("/get/ultimo/{datainizio}/{datafine}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getClientiByUltimoContatto(@DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("datainizio") Date dataInizio, @PathVariable("datafine") Date dataFine, Pageable page) {
+		Page<Cliente> result = clService.getClientiPerUltimoContatto(page, dataInizio, dataFine);
+		if (result.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		else {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+	}
+	
+	
 	
 	@GetMapping("/getby/{nome}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")

@@ -1,5 +1,7 @@
 package it.epicode.be.logic;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,21 @@ public class StatoFatturaService {
 	private StatoFatturaRepo repoSF;
 	
 	public StatoFattura saveStato(StatoFattura sf) {
+		List<StatoFattura> stati = repoSF.findAll();
+		for (StatoFattura s : stati) {
+			if (s.getTipoStato().equals(sf.getTipoStato())) {
+				return null;
+			}
+				
+		}
 		return repoSF.save(sf);
 		
+		
+	}
+	
+	public List<StatoFattura> getAll() {
+		
+		return repoSF.findAll();
 	}
 
 }
