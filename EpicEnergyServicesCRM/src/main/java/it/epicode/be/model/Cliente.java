@@ -16,7 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 
 import lombok.Data;
 
@@ -47,7 +48,7 @@ public class Cliente {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Indirizzo sedeOperativa;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Fattura> fatture;
 	
 	@Enumerated(EnumType.STRING)

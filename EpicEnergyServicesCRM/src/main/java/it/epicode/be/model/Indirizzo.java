@@ -8,6 +8,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -26,6 +29,7 @@ public class Indirizzo {
 	private String localita;
 	private Long cap;
 	@ManyToOne
+	@Cascade(CascadeType.ALL)
 	private Comune comune;
 
 }

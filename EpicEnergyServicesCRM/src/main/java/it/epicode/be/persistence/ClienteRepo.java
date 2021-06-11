@@ -28,4 +28,9 @@ public interface ClienteRepo extends PagingAndSortingRepository<Cliente, Long>{
 	
 	@Query("Select c FROM Cliente c WHERE c.dataUltimoContatto >= :dataInizio AND c.dataUltimoContatto < :dataFine")
 	public Page<Cliente> findClientiByUltimoContatto(Pageable page, Date dataInizio, Date dataFine); 
+	
+	public Page<Cliente> findByRagioneSociale(Pageable page, String ragioneSociale);
+	
+	@Query("SELECT c FROM Cliente c WHERE c.fatturatoAnnuale >= :minimo AND c.fatturatoAnnuale <= :massimo")
+	public Page<Cliente> findByRangeFatturato(Pageable page, BigDecimal minimo, BigDecimal massimo);
 }

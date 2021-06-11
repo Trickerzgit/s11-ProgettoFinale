@@ -77,4 +77,12 @@ public class ClienteService {
 	public Page<Cliente> getClientiPerUltimoContatto(Pageable page, Date dataInizio, Date dataFine) {
 		return repoC.findClientiByUltimoContatto(page, dataInizio, dataFine);
 	}
+	
+	public Page<Cliente> getClienteByRagioneSociale(Pageable page, String ragione) {
+		return repoC.findByRagioneSociale(page, ragione);
+	}
+	
+	public Page<Cliente> getClienteByRangeFatturato(Pageable page, BigDecimal min, BigDecimal max) {
+		return repoC.findByRangeFatturato(page, min, max);
+	}
 }

@@ -89,6 +89,18 @@ public class ClienteController {
 		}
 	}
 	
+	@GetMapping("/get/ragione/{ragione}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getClienteByRagione(@PathVariable("ragione") String ragione, Pageable page) {
+		Page<Cliente> c = clService.getClienteByRagioneSociale(page, ragione);
+		if (!c.equals(null)) {
+			return new ResponseEntity<>(c, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+	}
+	
 	@GetMapping("/get/fatturato/{importo}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<Page<Cliente>> getClientiByFatturato(@PathVariable("importo") BigDecimal importo, Pageable page) {
@@ -125,7 +137,17 @@ public class ClienteController {
 		}
 	}
 	
-	
+	@GetMapping("get/range/{minimo}/{massimo}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	public ResponseEntity<Page<Cliente>> getByRangeFatturato(@PathVariable("minimo") BigDecimal minimo, @PathVariable("massimo") BigDecimal massimo, Pageable page) {
+		Page<Cliente> result = clService.getClienteByRangeFatturato(page, minimo, massimo);
+		if (result.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		else {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+	}
 	
 	@GetMapping("/getby/{nome}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")

@@ -3,6 +3,7 @@ package it.epicode.be.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 
 import lombok.Data;
 
@@ -28,9 +30,10 @@ public class Fattura {
 	@SequenceGenerator(name="ees_fattura_seq", sequenceName="ees_fattura_seq", allocationSize=1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ees_fattura_seq")
 	private Integer numero;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private StatoFattura stato;
-	@ManyToOne
+	
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Cliente cliente;
 	
 }
